@@ -20,9 +20,7 @@ namespace DapperCourse.Repository
 
         public Company Find(int id) => _context.Companies.FirstOrDefault(u => u.CompanyId == id);
 
-
         public List<Company> GetAll() => _context.Companies.ToList();
-    
 
         public void Remove(int id)
         {
