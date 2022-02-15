@@ -16,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //builder.Services.AddScoped<ICompanyRepository, CompanyRepositoryEF>();
 //change the implementation to Dapper implementation
 builder.Services.AddScoped<ICompanyRepository, CompanyRepositoryDapper>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryDapper>();
 
 var app = builder.Build();
 
