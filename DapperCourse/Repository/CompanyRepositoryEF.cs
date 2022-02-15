@@ -18,16 +18,11 @@ namespace DapperCourse.Repository
             return company;
         }
 
-        public Company Find(int id)
-        {
-            return _context.Companies.FirstOrDefault(u => u.CompanyId == id);
+        public Company Find(int id) => _context.Companies.FirstOrDefault(u => u.CompanyId == id);
 
-        }
 
-        public List<Company> GetAll()
-        {
-            return _context.Companies.ToList();
-        }
+        public List<Company> GetAll() => _context.Companies.ToList();
+    
 
         public void Remove(int id)
         {
