@@ -38,7 +38,7 @@ namespace DapperCourse.Repository
 
         public void Remove(int id)
         {
-            var sql = "DELETE FROM Employes WHERE EmployeeId = @Id";
+            var sql = "DELETE FROM Employees WHERE EmployeeId = @Id";
             db.Execute( sql, new { id } );
 
         }

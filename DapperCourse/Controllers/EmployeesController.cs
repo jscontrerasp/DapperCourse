@@ -51,6 +51,12 @@ namespace DapperCourse.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> companyList = _companyRepo.GetAll().Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.CompanyId.ToString()
+            });
+            ViewBag.CompanyList = companyList;
             return View();
         }
 
@@ -79,6 +85,12 @@ namespace DapperCourse.Controllers
             }
 
             Employee = _employeeRepo.Find(id.GetValueOrDefault());
+            IEnumerable<SelectListItem> companyList = _companyRepo.GetAll().Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.CompanyId.ToString()
+            });
+            ViewBag.CompanyList = companyList;
             if (Employee == null)
             {
                 return NotFound();
