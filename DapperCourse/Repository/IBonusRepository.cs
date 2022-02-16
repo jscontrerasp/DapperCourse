@@ -9,5 +9,11 @@ namespace DapperCourse.Repository
         Company GetCompanyWithEmployees(int id);
 
         List<Company> GetAllCompaniesWithEmployees();
+
+        void AddTestCompanyWithEmployees(Company company);
+
+        void RemoveRange(int[] companyId);
+
+        List<Company> FilterCompanyByName(string name);
     }
 }

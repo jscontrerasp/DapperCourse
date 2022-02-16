@@ -14,6 +14,22 @@ namespace DapperCourse.Repository
             this.db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
+        public void AddTestCompanyWithEmployees(Company company)
+        {
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);"
+                + "SELECT CAST(SCOPE_IDENTITY() as int);";
+            var id = db.Query<int>(sql, company).Single();
+            company.CompanyId = id;
+
+            foreach (var employee in company.Employees)
+            {
+                employee.CompanyId = company.CompanyId;
+                var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);"
+                + "SELECT CAST(SCOPE_IDENTITY() as int);";
+                db.Query<int>(sqlEmp, employee).Single();
+            }
+        }
+
         public List<Company> GetAllCompaniesWithEmployees()
         {
             //CHECK THE ORDER OF C.*,E.*
@@ -68,6 +84,16 @@ namespace DapperCourse.Repository
             splitOn:"CompanyId");
 
             return employee.ToList();
+        }
+
+        public void RemoveRange(int[] companyId)
+        {
+            db.Query("DELETE FROM Companies WHERE CompanyId IN @listIds;", new { @listIds = companyId });
+        }
+
+        public List<Company> FilterCompanyByName(string name)
+        {
+            return db.Query<Company>("SELECT * FROM Companies WHERE Name like '%' + @name + '%'", new {name}).ToList();
         }
     }
 }
