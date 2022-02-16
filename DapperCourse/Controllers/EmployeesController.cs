@@ -77,7 +77,7 @@ namespace DapperCourse.Controllers
         {
             if (ModelState.IsValid)
             {
-                _employeeRepo.Add(Employee);
+                await _employeeRepo.AddAsync(Employee);
                 return RedirectToAction(nameof(Index));
             }
             return View(Employee);

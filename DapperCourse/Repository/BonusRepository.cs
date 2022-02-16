@@ -30,7 +30,7 @@ namespace DapperCourse.Repository
             //    db.Query<int>(sqlEmp, employee).Single();
             //}
 
-            company.Employees.Select(emp => { emp.CompanyId = id ; return emp }).ToList();
+            company.Employees.Select(emp => { emp.CompanyId = id ; return emp; }).ToList();
             var sqlEmp = "INSERT INTO Employees(Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); "
                 + "SELECT CAST(SCOPE_IDENTITY() as int);";
             //bulk insert
@@ -48,7 +48,7 @@ namespace DapperCourse.Repository
                     var id = db.Query<int>(sql, company).Single();
                     company.CompanyId = id;
 
-                    company.Employees.Select(emp => { emp.CompanyId = id; return emp }).ToList();
+                    company.Employees.Select(emp => { emp.CompanyId = id; return emp; }).ToList();
                     var sqlEmp = "INSERT INTO Employees(Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); "
                         + "SELECT CAST(SCOPE_IDENTITY() as int);";
                     //bulk insert
