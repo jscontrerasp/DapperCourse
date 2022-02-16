@@ -2,6 +2,7 @@
 using DapperCourse.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Transactions;
 
 namespace DapperCourse.Repository
 {
@@ -34,6 +35,32 @@ namespace DapperCourse.Repository
                 + "SELECT CAST(SCOPE_IDENTITY() as int);";
             //bulk insert
             db.Execute(sqlEmp, company.Employees);
+        }
+
+        public void AddTestCompanyWithEmployeesWithTransaction(Company company)
+        {
+            using(var transaction = new TransactionScope())
+            {
+                try
+                {
+                    var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);"
+                        + "SELECT CAST(SCOPE_IDENTITY() as int);";
+                    var id = db.Query<int>(sql, company).Single();
+                    company.CompanyId = id;
+
+                    company.Employees.Select(emp => { emp.CompanyId = id; return emp }).ToList();
+                    var sqlEmp = "INSERT INTO Employees(Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); "
+                        + "SELECT CAST(SCOPE_IDENTITY() as int);";
+                    //bulk insert
+                    db.Execute(sqlEmp, company.Employees);
+                    transaction.Complete();
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
+            }
+            
         }
 
         public List<Company> GetAllCompaniesWithEmployees()

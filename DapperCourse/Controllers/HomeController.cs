@@ -49,7 +49,7 @@ namespace DapperCourse.Controllers
                 Phone = " test phone 2",
                 Title = "Test Manager 2"
             });
-            _bonusRepository.AddTestCompanyWithEmployees(company);
+            _bonusRepository.AddTestCompanyWithEmployeesWithTransaction(company);
             return RedirectToAction(nameof(Index));
         }
 
