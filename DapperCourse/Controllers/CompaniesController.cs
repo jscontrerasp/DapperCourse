@@ -14,17 +14,19 @@ namespace DapperCourse.Controllers
 {
     public class CompaniesController : Controller
     {
-        private readonly ICompanyRepository _companyrepo;
+        private readonly ICompanyRepository _companyRepo;
+        private readonly IBonusRepository _bonusRepo;
 
-        public CompaniesController(ICompanyRepository companyrepo)
+        public CompaniesController(ICompanyRepository companyRepo, IBonusRepository bonusRepo)
         {
-            _companyrepo = companyrepo;
+            _companyRepo = companyRepo;
+            _bonusRepo = bonusRepo;
         }
 
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            return View(_companyrepo.GetAll());
+            return View(_companyRepo.GetAll());
         }
 
         // GET: Companies/Details/5
@@ -35,7 +37,7 @@ namespace DapperCourse.Controllers
                 return NotFound();
             }
 
-            var company = _companyrepo.Find(id.GetValueOrDefault());
+            var company = _bonusRepo.GetCompanyWithEmployees(id.GetValueOrDefault());
             if (company == null)
             {
                 return NotFound();
@@ -59,7 +61,7 @@ namespace DapperCourse.Controllers
         {
             if (ModelState.IsValid)
             {
-                _companyrepo.Add(company);
+                _companyRepo.Add(company);
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -73,7 +75,7 @@ namespace DapperCourse.Controllers
                 return NotFound();
             }
 
-            var company = _companyrepo.Find(id.GetValueOrDefault());
+            var company = _companyRepo.Find(id.GetValueOrDefault());
             if (company == null)
             {
                 return NotFound();
@@ -95,7 +97,7 @@ namespace DapperCourse.Controllers
 
             if (ModelState.IsValid)
             {
-                _companyrepo.Update(company);
+                _companyRepo.Update(company);
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -109,7 +111,7 @@ namespace DapperCourse.Controllers
                 return NotFound();
             }
 
-            _companyrepo.Remove(id.GetValueOrDefault());
+            _companyRepo.Remove(id.GetValueOrDefault());
             return RedirectToAction(nameof(Index));
         }
 
