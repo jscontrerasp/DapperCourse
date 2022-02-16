@@ -21,13 +21,19 @@ namespace DapperCourse.Repository
             var id = db.Query<int>(sql, company).Single();
             company.CompanyId = id;
 
-            foreach (var employee in company.Employees)
-            {
-                employee.CompanyId = company.CompanyId;
-                var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);"
+            //foreach (var employee in company.Employees)
+            //{
+            //    employee.CompanyId = company.CompanyId;
+            //    var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);"
+            //    + "SELECT CAST(SCOPE_IDENTITY() as int);";
+            //    db.Query<int>(sqlEmp, employee).Single();
+            //}
+
+            company.Employees.Select(emp => { emp.CompanyId = id ; return emp }).ToList();
+            var sqlEmp = "INSERT INTO Employees(Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); "
                 + "SELECT CAST(SCOPE_IDENTITY() as int);";
-                db.Query<int>(sqlEmp, employee).Single();
-            }
+            //bulk insert
+            db.Execute(sqlEmp, company.Employees);
         }
 
         public List<Company> GetAllCompaniesWithEmployees()
