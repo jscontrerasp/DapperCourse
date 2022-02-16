@@ -1,4 +1,5 @@
 ﻿using DapperCourse.Models;
+using DapperCourse.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +8,18 @@ namespace DapperCourse.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBonusRepository _bonusRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBonusRepository bonusRepository)
         {
             _logger = logger;
+            _bonusRepository = bonusRepository;  
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Company> companies = _bonusRepository.GetAllCompaniesWithEmployees();
+            return View(companies);
         }
 
         public IActionResult Privacy()

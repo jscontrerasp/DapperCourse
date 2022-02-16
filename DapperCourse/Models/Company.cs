@@ -6,6 +6,10 @@ namespace DapperCourse.Models
     [Table("Companies")]
     public class Company
     {
+        public Company()
+        {
+            Employees = new List<Employee>();
+        }
         [Key]
         public int CompanyId { get; set; }
         public string Name { get; set; }
@@ -15,6 +19,6 @@ namespace DapperCourse.Models
         public string PostalCode { get; set; }
 
         [Write(false)]
-        public List<Employee>? Employees { get; set; }
+        public List<Employee> Employees { get; set; }
     }
 }
